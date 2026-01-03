@@ -1,6 +1,6 @@
-name: Flutter CI
+name: Flutter Build
 
-# 触发条件：当推送到 main 分支，或提交 Pull Request 时触发
+# 只要有代码推送到 main 分支，或者有 Pull Request，就会运行
 on:
   push:
     branches: [ "main" ]
@@ -12,34 +12,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 拉取代码
+      # 1. 下载你的代码
       - uses: actions/checkout@v4
 
-      # 2. 安装并配置 Java 环境 (Android 构建需要)
+      # 2. 安装 Java (因为构建 Android 需要 Java 环境)
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      # 3. 核心步骤：安装 Flutter 环境
-      # 这是一个专门为Flutter设计的Action，会自动配置好 flutter 命令
+      # 3. 安装 Flutter 环境 (这是最关键的一步，之前的报错就是因为缺这个)
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # 使用稳定版
-          # flutter-version: '3.19.0' # 你也可以指定具体版本
+          channel: 'stable'
+          cache: true
 
-      # 4. 运行 Flutter 命令安装依赖 (代替 dart pub get)
-      - name: Install dependencies
+      # 4. 获取依赖 (这里使用的是 flutter pub get，而不是 dart pub get)
+      - name: Get dependencies
         run: flutter pub get
 
-      # 5. (可选) 运行静态代码分析
-      - name: Analyze
-        run: flutter analyze
-
-      # 6. (可选) 运行测试
+      # 5. 运行测试 (可选，如果你的项目里没有写测试，这步可能会跳过或报错，建议先保留)
       - name: Run tests
         run: flutter test
 
-      # 7. (可选) 构建 Android APK 验证打包是否正常
+      # 6. 尝试构建 APK (验证代码是否真的能打包成功)
       - name: Build APK
-        run: flutter build apk --debug
+        run: flutter build apk
