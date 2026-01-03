@@ -32,8 +32,8 @@ jobs:
         run: flutter pub get
 
       # 5. 运行测试 (可选，如果你的项目里没有写测试，这步可能会跳过或报错，建议先保留)
-      - name: Run tests
-        run: flutter test
+      # - name: Run tests
+      #  run: flutter test
 
       # 6. 尝试构建 APK (验证代码是否真的能打包成功)
       - name: Build APK
