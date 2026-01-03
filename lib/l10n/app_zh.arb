@@ -90,5 +90,9 @@
   "soundDeviceFound": "发现设备",
   "soundShareReceived": "接收分享",
   "soundSystemNotify": "系统通知",
-  "preview": "预览"
+  "preview": "预览",
+  "settingsNotification": "通知",
+  "settingsInAppNotifyTest": "在应用内测试通知",
+  "settingsSystemNotifyTest": "系统通知测试",
+  "settingsSystemNotifyMobileOnly": "此功能仅在移动端（Android/iOS）可用。"
 }

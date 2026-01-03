@@ -8,6 +8,8 @@ import 'package:oneshare/services/sound_service.dart';
 import 'package:oneshare/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:oneshare/pages/sound_settings.dart';
+import 'package:oneshare/services/notification_service.dart';
+import 'dart:io';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -65,17 +67,14 @@ class SettingsPage extends StatelessWidget {
                       themeModel.setFontFamily(newValue);
                     }
                   },
-                  items:
-                      <String>[
-                        'HarmonyOS Sans SC',
-                        'MiSans',
-                        'Gakumas Font',
-                      ].map<DropdownMenuItem<String>>((String value) {
+                  items: <String>['HarmonyOS Sans SC', 'MiSans', 'Gakumas Font']
+                      .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
                         );
-                      }).toList(),
+                      })
+                      .toList(),
                 ),
               ),
               const Divider(),
@@ -150,7 +149,9 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.folder),
                 title: Text(l10n.settingsDownloadFolder),
-                subtitle: Text(settingsModel.downloadPath ?? l10n.settingsNotSet),
+                subtitle: Text(
+                  settingsModel.downloadPath ?? l10n.settingsNotSet,
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: () async {
@@ -204,6 +205,70 @@ class SettingsPage extends StatelessWidget {
                     style: const TextStyle(fontStyle: FontStyle.italic),
                   ),
                 ),
+              const Divider(),
+              _buildSectionHeader(context, l10n.settingsNotification),
+              ListTile(
+                leading: const Icon(Icons.notifications_active),
+                title: Text(l10n.settingsInAppNotifyTest),
+                onTap: () {
+                  NotificationService().showBubbleNotification(
+                    senderName: 'Test Sender',
+                    message: 'This is a test in-app notification.',
+                    senderIp: '127.0.0.1',
+                  );
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.system_update_alt),
+                title: Text(l10n.settingsSystemNotifyTest),
+                subtitle: (Platform.isAndroid || Platform.isIOS)
+                    ? null
+                    : Text(
+                        l10n.settingsSystemNotifyMobileOnly,
+                        style: const TextStyle(color: Colors.orange),
+                      ),
+                enabled: Platform.isAndroid || Platform.isIOS,
+                onTap: () {
+                  NotificationService().showSystemNotification(
+                    senderName: 'Test Sender',
+                    message: 'This is a test system notification.',
+                    senderIp: '127.0.0.1',
+                  );
+                },
+              ),
+              const Divider(),
+              _buildSectionHeader(context, l10n.settingsNotification),
+              ListTile(
+                leading: const Icon(Icons.notifications_active),
+                title: Text(l10n.settingsInAppNotifyTest),
+                onTap: () {
+                  NotificationService().showBubbleNotification(
+                    senderName: 'Test Sender',
+                    message: 'This is a test in-app notification.',
+                    senderIp: '127.0.0.1',
+                  );
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.system_update_alt),
+                title: Text(l10n.settingsSystemNotifyTest),
+                subtitle: (Platform.isAndroid || Platform.isIOS)
+                    ? null
+                    : Text(
+                        l10n.settingsSystemNotifyMobileOnly,
+                        style: const TextStyle(color: Colors.orange),
+                      ),
+                enabled: Platform.isAndroid || Platform.isIOS,
+                onTap: () {
+                  NotificationService().showSystemNotification(
+                    senderName: 'Test Sender',
+                    message: 'This is a test system notification.',
+                    senderIp: '127.0.0.1',
+                  );
+                },
+              ),
               const Divider(),
               _buildSectionHeader(context, l10n.settingsAbout),
               ListTile(
@@ -280,7 +345,9 @@ class _AddMountDialogState extends State<_AddMountDialog> {
             children: [
               DropdownButtonFormField<MountType>(
                 value: _type,
-                decoration: InputDecoration(labelText: l10n.settingsConnectionType),
+                decoration: InputDecoration(
+                  labelText: l10n.settingsConnectionType,
+                ),
                 items: MountType.values.map((type) {
                   String label;
                   switch (type) {
@@ -304,7 +371,9 @@ class _AddMountDialogState extends State<_AddMountDialog> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: l10n.settingsConnectionName),
+                decoration: InputDecoration(
+                  labelText: l10n.settingsConnectionName,
+                ),
                 initialValue: _name,
                 onSaved: (val) => _name = val ?? '',
                 validator: (val) =>
@@ -327,16 +396,22 @@ class _AddMountDialogState extends State<_AddMountDialog> {
                 onSaved: (val) => _port = int.tryParse(val ?? '0') ?? 0,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: l10n.settingsConnectionPath),
+                decoration: InputDecoration(
+                  labelText: l10n.settingsConnectionPath,
+                ),
                 initialValue: '/',
                 onSaved: (val) => _path = val ?? '/',
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: l10n.settingsConnectionUsername),
+                decoration: InputDecoration(
+                  labelText: l10n.settingsConnectionUsername,
+                ),
                 onSaved: (val) => _username = val ?? '',
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: l10n.settingsConnectionPassword),
+                decoration: InputDecoration(
+                  labelText: l10n.settingsConnectionPassword,
+                ),
                 obscureText: true,
                 onSaved: (val) => _password = val ?? '',
               ),

@@ -139,5 +139,9 @@
   "soundDeviceFound": "Device Found",
   "soundShareReceived": "Share Received",
   "soundSystemNotify": "System Notification",
-  "preview": "Preview"
+  "preview": "Preview",
+  "settingsNotification": "Notification",
+  "settingsInAppNotifyTest": "In-App Notification Test",
+  "settingsSystemNotifyTest": "System Notification Test",
+  "settingsSystemNotifyMobileOnly": "This feature is only available on mobile devices (Android/iOS)."
 }

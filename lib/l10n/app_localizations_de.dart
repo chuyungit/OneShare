@@ -308,4 +308,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get settingsNotification => 'Notification';
+
+  @override
+  String get settingsInAppNotifyTest => 'In-App Notification Test';
+
+  @override
+  String get settingsSystemNotifyTest => 'System Notification Test';
+
+  @override
+  String get settingsSystemNotifyMobileOnly =>
+      'This feature is only available on mobile devices (Android/iOS).';
 }

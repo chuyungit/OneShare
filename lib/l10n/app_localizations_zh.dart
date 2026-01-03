@@ -300,6 +300,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preview => '预览';
+
+  @override
+  String get settingsNotification => '通知';
+
+  @override
+  String get settingsInAppNotifyTest => '在应用内测试通知';
+
+  @override
+  String get settingsSystemNotifyTest => '系统通知测试';
+
+  @override
+  String get settingsSystemNotifyMobileOnly => '此功能仅在移动端（Android/iOS）可用。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

@@ -662,6 +662,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preview'**
   String get preview;
+
+  /// No description provided for @settingsNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get settingsNotification;
+
+  /// No description provided for @settingsInAppNotifyTest.
+  ///
+  /// In en, this message translates to:
+  /// **'In-App Notification Test'**
+  String get settingsInAppNotifyTest;
+
+  /// No description provided for @settingsSystemNotifyTest.
+  ///
+  /// In en, this message translates to:
+  /// **'System Notification Test'**
+  String get settingsSystemNotifyTest;
+
+  /// No description provided for @settingsSystemNotifyMobileOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is only available on mobile devices (Android/iOS).'**
+  String get settingsSystemNotifyMobileOnly;
 }
 
 class _AppLocalizationsDelegate
