@@ -1,10 +1,6 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+name: Flutter CI
 
-name: Dart
-
+# 触发条件：当推送到 main 分支，或提交 Pull Request 时触发
 on:
   push:
     branches: [ "main" ]
@@ -16,27 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. 拉取代码
       - uses: actions/checkout@v4
 
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      # 2. 安装并配置 Java 环境 (Android 构建需要)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
+      # 3. 核心步骤：安装 Flutter 环境
+      # 这是一个专门为Flutter设计的Action，会自动配置好 flutter 命令
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # 使用稳定版
+          # flutter-version: '3.19.0' # 你也可以指定具体版本
+
+      # 4. 运行 Flutter 命令安装依赖 (代替 dart pub get)
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
+      # 5. (可选) 运行静态代码分析
+      - name: Analyze
+        run: flutter analyze
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
-        run: dart analyze
-
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
+      # 6. (可选) 运行测试
       - name: Run tests
-        run: dart test
+        run: flutter test
+
+      # 7. (可选) 构建 Android APK 验证打包是否正常
+      - name: Build APK
+        run: flutter build apk --debug
