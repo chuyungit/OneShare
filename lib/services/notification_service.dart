@@ -20,7 +20,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 }
 
 /// Notification service for handling in-app and system notifications
-class NotificationService {
+class NotificationService with WidgetsBindingObserver {
   static final NotificationService _instance = NotificationService._();
   factory NotificationService() => _instance;
   NotificationService._();
@@ -29,6 +29,7 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
+  bool _isInForeground = true;
   AppLocalizations? _l10n;
   final _bubbleStreamController =
       StreamController<MessageNotification>.broadcast();
@@ -45,12 +46,20 @@ class NotificationService {
   Future<void> initialize() async {
     if (_initialized) return;
 
+    WidgetsBinding.instance.addObserver(this);
+
     if (Platform.isAndroid || Platform.isIOS) {
       await _initializeLocalNotifications();
     }
 
     _initialized = true;
     debugPrint('Notification service initialized');
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _isInForeground = state == AppLifecycleState.resumed;
+    debugPrint('App lifecycle state changed: $state, inForeground: $_isInForeground');
   }
 
   /// Initialize local notifications
@@ -124,6 +133,11 @@ class NotificationService {
   }) async {
     if (!Platform.isAndroid && !Platform.isIOS) {
       debugPrint('System notifications only supported on Android/iOS');
+      return;
+    }
+
+    if (_isInForeground) {
+      debugPrint('App is in foreground, suppressing system notification');
       return;
     }
 

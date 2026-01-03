@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
@@ -37,7 +38,7 @@ class _MessageBubbleState extends State<MessageBubble>
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, -1),
+      begin: const Offset(0, 1), // Slide from bottom
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
@@ -309,10 +310,15 @@ class MessageBubbleOverlay {
     _currentOverlay = OverlayEntry(
       builder: (context) {
         debugPrint('MessageBubbleOverlay: Building overlay entry');
+        
+        // Check platform for layout
+        final isDesktop = Platform.isWindows || Platform.isLinux || Platform.isMacOS;
+        
         return Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
+          bottom: isDesktop ? 24 : 100, // Bottom right for desktop, above nav bar for mobile
+          right: isDesktop ? 24 : 16,
+          left: isDesktop ? null : 16, // Full width (with padding) for mobile
+          width: isDesktop ? 400 : null, // Fixed width for desktop
           child: MessageBubble(notification: notification, onDismiss: hide),
         );
       },
