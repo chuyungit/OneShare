@@ -1,0 +1,143 @@
+{
+  "appTitle": "OneShare",
+  "navShare": "Share",
+  "navWeb": "Web",
+  "navDownloading": "Downloading",
+  "navSettings": "Settings",
+  "navDownloads": "Downloads",
+  "trayShow": "Show OneShare",
+  "trayExit": "Exit",
+  "serviceTitle": "OneShare Service",
+  "serviceContent": "Initializing OneShare background service",
+  "channelName": "OneShare Foreground Service",
+  "channelDescription": "This channel is used for important notifications.",
+  "settingsLanguage": "Language",
+  "languageSystem": "System Default",
+  "settingsAppearance": "Appearance",
+  "settingsDarkMode": "Dark Mode",
+  "settingsDarkModeSubtitle": "Enable dark theme for the application",
+  "settingsAppFont": "App Font",
+  "settingsFontUsageNotice": "Font Usage Notice",
+  "settingsFontUsageContent": "Dear User:\n\nThis font originates from the game \"THE IDOLM@STER Gakuen\".\n\nThis is a modified version of the font from a GitHub project gakuen-imas-localify, supporting English, Japanese, Chinese and more language.\n\nNo authorization from the developer or Bandai Namco Entertainment Inc. is required to use this font.\n\nThis application uses this font for non-commercial purposes only; please choose carefully.",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "settingsDownloads": "Downloads",
+  "settingsDownloadFolder": "Download Folder",
+  "settingsNotSet": "Not set",
+  "settingsNetworkConnections": "Network Connections",
+  "settingsAddConnection": "Add Connection",
+  "settingsAddConnectionSubtitle": "Connect to OpenList, SMB, SFTP, or WebDAV",
+  "settingsNoNetworkConnections": "No network connections added.",
+  "settingsConnectionType": "Type",
+  "settingsConnectionName": "Name",
+  "settingsConnectionHost": "Host (IP/Domain)",
+  "settingsConnectionPort": "Port (0 = default)",
+  "settingsConnectionPath": "Path (Remote)",
+  "settingsConnectionUsername": "Username",
+  "settingsConnectionPassword": "Password",
+  "add": "Add",
+  "settingsAbout": "About",
+  "settingsAboutOneShare": "About OneShare",
+  "settingsAboutSubtitle": "Version, Developer, and License",
+  "required": "Required",
+  "welcomeSkip": "Skip",
+  "welcomeNext": "Next",
+  "welcomeTitle": "Welcome to OneShare!",
+  "welcomeVersion": "Version {version}",
+  "@welcomeVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeChooseLanguage": "Choose your preferred language",
+  "welcomeUseSystemLanguage": "Use System Language",
+  "welcomeCurrentLocale": "Currently: {locale}",
+  "@welcomeCurrentLocale": {
+    "placeholders": {
+      "locale": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeSelectLanguage": "Select Language",
+  "welcomeFeature1Title": "Cross-Platform Sharing",
+  "welcomeFeature1Desc": "Seamlessly transfer files between Android, iOS, Windows, Linux, and macOS.",
+  "welcomeFeature2Title": "Multiple Protocols",
+  "welcomeFeature2Desc": "Support for WebDAV, SSH/SFTP, and SMB for flexible file management.",
+  "welcomeFeature3Title": "Responsive Design",
+  "welcomeFeature3Desc": "A beautiful, adaptive interface that works perfectly on mobile and desktop.",
+  "welcomeAllSet": "All Set!",
+  "welcomeSetupComplete": "You have completed the setup.",
+  "welcomeSwipeUp": "Swipe up to enter App",
+  "welcomeClickToEnter": "Press any key or click to enter",
+  "welcomeWhatsNew": "What's New",
+  "welcomeLogPerformance": "Performance improvements",
+  "welcomeLogBugFixes": "Bug fixes and stability enhancements",
+  "welcomeLogUI": "UI refinements for better user experience",
+  "welcomeContinue": "Continue",
+  "notifyChannelTextName": "Text Messages",
+  "notifyChannelTextDesc": "Notifications for received text messages",
+  "notifyChannelFileName": "File Transfers",
+  "notifyChannelFileDesc": "Notifications for file transfer requests",
+  "notifyTitleText": "{senderName} sent you a text",
+  "@notifyTitleText": {
+    "placeholders": {
+      "senderName": {
+        "type": "String"
+      }
+    }
+  },
+  "notifyTitleFile": "{senderName} sent you a file request",
+  "@notifyTitleFile": {
+    "placeholders": {
+      "senderName": {
+        "type": "String"
+      }
+    }
+  },
+  "notifyActionReject": "Reject",
+  "notifyActionCopy": "Copy",
+  "notifyActionShare": "Share",
+  "notifyActionAccept": "Accept",
+  "bubbleReceiveFile": "Receive file from {senderName}?",
+  "@bubbleReceiveFile": {
+    "placeholders": {
+      "senderName": {
+        "type": "String"
+      }
+    }
+  },
+  "bubbleReceiveText": "{senderName} sent you a text:",
+  "@bubbleReceiveText": {
+    "placeholders": {
+      "senderName": {
+        "type": "String"
+      }
+    }
+  },
+  "bubbleAcceptSaveAs": "Accept & Save As...",
+  "bubbleNoFiles": "No files info",
+  "bubbleMoreFiles": "+ {count} more file(s)",
+  "@bubbleMoreFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bubbleCopied": "Message copied to clipboard",
+  "bubbleReject": "Reject",
+  "settingsSound": "Sound Settings",
+  "settingsSoundSubtitle": "Manage sound effects",
+  "soundDownloadComplete": "Download Complete",
+  "soundDownloadFailed": "Download Failed",
+  "soundError": "Error",
+  "soundNewEvent": "New Event",
+  "soundNotice": "Notice",
+  "soundDeviceFound": "Device Found",
+  "soundShareReceived": "Share Received",
+  "soundSystemNotify": "System Notification",
+  "preview": "Preview"
+}
