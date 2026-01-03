@@ -48,7 +48,7 @@ class NotificationService with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
 
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid || Platform.isIOS || Platform.isLinux) {
       await _initializeLocalNotifications();
     }
 
@@ -72,10 +72,14 @@ class NotificationService with WidgetsBindingObserver {
       requestBadgePermission: true,
       requestSoundPermission: true,
     );
+    const linuxSettings = LinuxInitializationSettings(
+      defaultActionName: 'Open notification',
+    );
 
     const settings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
+      linux: linuxSettings,
     );
 
     await _notificationsPlugin.initialize(
@@ -124,15 +128,15 @@ class NotificationService with WidgetsBindingObserver {
     _bubbleStreamController.add(notification);
   }
 
-  /// Show system notification (Android/iOS)
+  /// Show system notification (Android/iOS/Linux)
   Future<void> showSystemNotification({
     required String senderName,
     required String message,
     required String senderIp,
     NotificationType type = NotificationType.text,
   }) async {
-    if (!Platform.isAndroid && !Platform.isIOS) {
-      debugPrint('System notifications only supported on Android/iOS');
+    if (!Platform.isAndroid && !Platform.isIOS && !Platform.isLinux) {
+      debugPrint('System notifications only supported on Android/iOS/Linux');
       return;
     }
 
@@ -209,9 +213,12 @@ class NotificationService with WidgetsBindingObserver {
       presentSound: true,
     );
 
+    const linuxDetails = LinuxNotificationDetails();
+
     final details = NotificationDetails(
       android: androidDetails,
       iOS: iosDetails,
+      linux: linuxDetails,
     );
 
     final notificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
