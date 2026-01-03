@@ -36,8 +36,10 @@ class _GlobalNotificationHandlerState extends State<GlobalNotificationHandler> {
             .notificationStream
             .listen((notification) {
           debugPrint('GlobalNotificationHandler: Received notification: ${notification.message}');
-          if (mounted && widget.navigatorKey.currentState?.overlay != null) {
-            MessageBubbleOverlay.show(widget.navigatorKey.currentState!.context, notification);
+          if (mounted) {
+            // Use the local context to find the Overlay. 
+            // Since this widget is in MaterialApp.builder, it has access to the root overlay.
+            MessageBubbleOverlay.show(context, notification);
           }
         });
       }
