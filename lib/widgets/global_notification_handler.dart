@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:oneshare/models/share_model.dart';
 import 'package:oneshare/services/notification_service.dart';
 import 'package:oneshare/widgets/message_bubble.dart';
+import 'package:oneshare/widgets/linux_message_bubble.dart';
 import 'package:oneshare/l10n/app_localizations.dart';
 
 class GlobalNotificationHandler extends StatefulWidget {
@@ -39,7 +41,11 @@ class _GlobalNotificationHandlerState extends State<GlobalNotificationHandler> {
           if (mounted) {
             // Use the local context to find the Overlay. 
             // Since this widget is in MaterialApp.builder, it has access to the root overlay.
-            MessageBubbleOverlay.show(context, notification);
+            if (Platform.isLinux) {
+              LinuxMessageBubbleOverlay.show(context, notification);
+            } else {
+              MessageBubbleOverlay.show(context, notification);
+            }
           }
         });
       }

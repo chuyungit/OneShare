@@ -312,7 +312,7 @@ class MessageBubbleOverlay {
         debugPrint('MessageBubbleOverlay: Building overlay entry');
         
         // Check platform for layout
-        final isDesktop = Platform.isWindows || Platform.isLinux || Platform.isMacOS;
+        final isDesktop = Platform.isWindows || Platform.isMacOS;
         
         return Positioned(
           bottom: isDesktop ? 24 : 100, // Bottom right for desktop, above nav bar for mobile
