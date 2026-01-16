@@ -37,17 +37,29 @@ class _GlobalNotificationHandlerState extends State<GlobalNotificationHandler> {
             .read<ShareModel>()
             .notificationStream
             .listen((notification) {
-          debugPrint('GlobalNotificationHandler: Received notification: ${notification.message}');
-          if (mounted) {
-            // Use the local context to find the Overlay. 
-            // Since this widget is in MaterialApp.builder, it has access to the root overlay.
-            if (Platform.isLinux) {
-              LinuxMessageBubbleOverlay.show(context, notification);
-            } else {
-              MessageBubbleOverlay.show(context, notification);
-            }
-          }
-        });
+              debugPrint(
+                'GlobalNotificationHandler: Received notification: ${notification.message}',
+              );
+              if (mounted) {
+                // Use the local context to find the Overlay.
+                // Since this widget is in MaterialApp.builder, it has access to the root overlay.
+                if (!mounted) return;
+                final overlay = widget.navigatorKey.currentState?.overlay;
+                if (Platform.isLinux) {
+                  LinuxMessageBubbleOverlay.show(
+                    context,
+                    notification,
+                    overlay: overlay,
+                  );
+                } else {
+                  MessageBubbleOverlay.show(
+                    context,
+                    notification,
+                    overlay: overlay,
+                  );
+                }
+              }
+            });
       }
     });
   }
@@ -65,12 +77,12 @@ class _GlobalNotificationHandlerState extends State<GlobalNotificationHandler> {
     // providing that the navigator is mounted. If not, we fall back to this context.
     final navContext = widget.navigatorKey.currentState?.context;
     if (navContext != null) {
-       final l10n = AppLocalizations.of(navContext);
-       if (l10n != null) {
-         NotificationService().updateLocalizations(l10n);
-       }
+      final l10n = AppLocalizations.of(navContext);
+      if (l10n != null) {
+        NotificationService().updateLocalizations(l10n);
+      }
     }
-    
+
     return widget.child;
   }
 }

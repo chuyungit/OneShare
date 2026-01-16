@@ -89,11 +89,11 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
     final notif = widget.notification;
     if (notif.files != null && notif.port != null) {
       context.read<DownloadModel>().startDownload(
-            notif.senderIp,
-            notif.port!,
-            notif.files!,
-            savePath: savePath,
-          );
+        notif.senderIp,
+        notif.port!,
+        notif.files!,
+        savePath: savePath,
+      );
       _dismiss();
     }
   }
@@ -122,7 +122,6 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
             padding: const EdgeInsets.all(24.0),
             child: Material(
               elevation: 12,
-              borderRadius: BorderRadius.circular(16),
               color: colorScheme.surface,
               // Add border for better contrast on Linux desktops
               shape: RoundedRectangleBorder(
@@ -140,7 +139,9 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
                     Row(
                       children: [
                         Icon(
-                          isFileOffer ? Icons.file_download_outlined : Icons.message_outlined,
+                          isFileOffer
+                              ? Icons.file_download_outlined
+                              : Icons.message_outlined,
                           color: colorScheme.primary,
                           size: 28,
                         ),
@@ -148,8 +149,12 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
                         Expanded(
                           child: Text(
                             isFileOffer
-                                ? l10n.bubbleReceiveFile(widget.notification.senderName)
-                                : l10n.bubbleReceiveText(widget.notification.senderName),
+                                ? l10n.bubbleReceiveFile(
+                                    widget.notification.senderName,
+                                  )
+                                : l10n.bubbleReceiveText(
+                                    widget.notification.senderName,
+                                  ),
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -169,13 +174,20 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                        color: colorScheme.surfaceContainerHighest.withValues(
+                          alpha: 0.5,
+                        ),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+                        border: Border.all(
+                          color: colorScheme.outlineVariant.withValues(
+                            alpha: 0.5,
+                          ),
+                        ),
                       ),
-                      child: isFileOffer 
+                      child: isFileOffer
                           ? _buildFileList(theme, l10n)
-                          : SelectableText( // Use SelectableText for Linux
+                          : SelectableText(
+                              // Use SelectableText for Linux
                               widget.notification.message,
                               style: theme.textTheme.bodyLarge,
                               maxLines: 8,
@@ -186,7 +198,7 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
                     // Actions
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: isFileOffer 
+                      children: isFileOffer
                           ? [
                               TextButton(
                                 onPressed: _dismiss,
@@ -278,7 +290,9 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               l10n.bubbleMoreFiles(files.length - 3),
-              style: theme.textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
             ),
           ),
       ],
@@ -302,32 +316,63 @@ class _LinuxMessageBubbleState extends State<LinuxMessageBubble>
 class LinuxMessageBubbleOverlay {
   static OverlayEntry? _currentOverlay;
 
-  static void show(BuildContext context, MessageNotification notification) {
+  static void show(
+    BuildContext context,
+    MessageNotification notification, {
+    OverlayState? overlay,
+  }) {
     debugPrint('LinuxMessageBubbleOverlay: Showing bubble');
     // Remove existing overlay if any
     hide();
 
-    _currentOverlay = OverlayEntry(
+    OverlayEntry? entry;
+    entry = OverlayEntry(
       builder: (context) {
         return Positioned(
-          bottom: 30, 
+          bottom: 30,
           right: 30,
-          width: 450, 
-          child: LinuxMessageBubble(notification: notification, onDismiss: hide),
+          width: 450,
+          child: LinuxMessageBubble(
+            notification: notification,
+            onDismiss: () {
+              if (_currentOverlay == entry) {
+                hide();
+              }
+            },
+          ),
         );
       },
     );
 
+    final targetOverlay = overlay ?? Overlay.maybeOf(context);
+    if (targetOverlay == null) {
+      debugPrint(
+        'LinuxMessageBubbleOverlay: Error inserting overlay: No Overlay widget found.',
+      );
+      return;
+    }
+
+    _currentOverlay = entry;
+
     try {
-      Overlay.of(context).insert(_currentOverlay!);
+      targetOverlay.insert(_currentOverlay!);
       debugPrint('LinuxMessageBubbleOverlay: Overlay inserted');
     } catch (e) {
+      _currentOverlay = null;
       debugPrint('LinuxMessageBubbleOverlay: Error inserting overlay: $e');
     }
   }
 
   static void hide() {
-    _currentOverlay?.remove();
-    _currentOverlay = null;
+    if (_currentOverlay != null) {
+      if (_currentOverlay!.mounted) {
+        try {
+          _currentOverlay!.remove();
+        } catch (e) {
+          debugPrint('LinuxMessageBubbleOverlay: Error removing overlay: $e');
+        }
+      }
+      _currentOverlay = null;
+    }
   }
 }

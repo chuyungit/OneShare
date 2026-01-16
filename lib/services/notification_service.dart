@@ -15,8 +15,10 @@ enum NotificationAction { reject, copy, share, accept, acceptAndSave }
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
   // ignore: avoid_print
-  print('notification(${notificationResponse.id}) action tapped: '
-      '${notificationResponse.actionId} with payload: ${notificationResponse.payload}');
+  print(
+    'notification(${notificationResponse.id}) action tapped: '
+    '${notificationResponse.actionId} with payload: ${notificationResponse.payload}',
+  );
 }
 
 /// Notification service for handling in-app and system notifications
@@ -59,7 +61,9 @@ class NotificationService with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _isInForeground = state == AppLifecycleState.resumed;
-    debugPrint('App lifecycle state changed: $state, inForeground: $_isInForeground');
+    debugPrint(
+      'App lifecycle state changed: $state, inForeground: $_isInForeground',
+    );
   }
 
   /// Initialize local notifications
@@ -134,30 +138,35 @@ class NotificationService with WidgetsBindingObserver {
     required String message,
     required String senderIp,
     NotificationType type = NotificationType.text,
+    bool force = false,
   }) async {
     if (!Platform.isAndroid && !Platform.isIOS && !Platform.isLinux) {
       debugPrint('System notifications only supported on Android/iOS/Linux');
       return;
     }
 
-    if (_isInForeground) {
+    if (!force && _isInForeground) {
       debugPrint('App is in foreground, suppressing system notification');
       return;
     }
 
     String channelId = 'text_messages';
     String channelName = _l10n?.notifyChannelTextName ?? 'Text Messages';
-    String channelDescription = _l10n?.notifyChannelTextDesc ?? 'Notifications for received text messages';
+    String channelDescription =
+        _l10n?.notifyChannelTextDesc ??
+        'Notifications for received text messages';
 
     if (type == NotificationType.fileOffer) {
       channelId = 'file_transfers';
       channelName = _l10n?.notifyChannelFileName ?? 'File Transfers';
-      channelDescription = _l10n?.notifyChannelFileDesc ?? 'Notifications for file transfer requests';
+      channelDescription =
+          _l10n?.notifyChannelFileDesc ??
+          'Notifications for file transfer requests';
     }
 
     final String title = type == NotificationType.text
-        ? (_l10n?.notifyTitleText(senderName) ?? '$senderName sent you a text')
-        : (_l10n?.notifyTitleFile(senderName) ?? '$senderName sent you a file request');
+        ? (_l10n?.notifyTitleText(senderName) ?? '$senderName ')
+        : (_l10n?.notifyTitleFile(senderName) ?? '$senderName ');
 
     final String contentTitle = '$title:';
 
@@ -193,7 +202,7 @@ class NotificationService with WidgetsBindingObserver {
               ),
             ]
           : [
-               AndroidNotificationAction(
+              AndroidNotificationAction(
                 'reject',
                 _l10n?.notifyActionReject ?? 'Reject',
                 cancelNotification: true,

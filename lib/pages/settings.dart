@@ -234,38 +234,7 @@ class SettingsPage extends StatelessWidget {
                     senderName: 'Test Sender',
                     message: 'This is a test system notification.',
                     senderIp: '127.0.0.1',
-                  );
-                },
-              ),
-              const Divider(),
-              _buildSectionHeader(context, l10n.settingsNotification),
-              ListTile(
-                leading: const Icon(Icons.notifications_active),
-                title: Text(l10n.settingsInAppNotifyTest),
-                onTap: () {
-                  NotificationService().showBubbleNotification(
-                    senderName: 'Test Sender',
-                    message: 'This is a test in-app notification.',
-                    senderIp: '127.0.0.1',
-                  );
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.system_update_alt),
-                title: Text(l10n.settingsSystemNotifyTest),
-                subtitle: (Platform.isAndroid || Platform.isIOS)
-                    ? null
-                    : Text(
-                        l10n.settingsSystemNotifyMobileOnly,
-                        style: const TextStyle(color: Colors.orange),
-                      ),
-                enabled: Platform.isAndroid || Platform.isIOS,
-                onTap: () {
-                  NotificationService().showSystemNotification(
-                    senderName: 'Test Sender',
-                    message: 'This is a test system notification.',
-                    senderIp: '127.0.0.1',
+                    force: true,
                   );
                 },
               ),

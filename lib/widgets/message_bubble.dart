@@ -90,12 +90,12 @@ class _MessageBubbleState extends State<MessageBubble>
     final notif = widget.notification;
     if (notif.files != null && notif.port != null) {
       context.read<DownloadModel>().startDownload(
-            notif.senderIp,
-            notif.port!,
-            notif.files!,
-            savePath: savePath,
-          );
-      
+        notif.senderIp,
+        notif.port!,
+        notif.files!,
+        savePath: savePath,
+      );
+
       // Navigate to main page or show success feedback
       // Assuming we want to close the bubble
       _dismiss();
@@ -138,7 +138,9 @@ class _MessageBubbleState extends State<MessageBubble>
                     Row(
                       children: [
                         Icon(
-                          isFileOffer ? Icons.file_download_outlined : Icons.message_outlined,
+                          isFileOffer
+                              ? Icons.file_download_outlined
+                              : Icons.message_outlined,
                           color: colorScheme.primary,
                           size: 24,
                         ),
@@ -146,8 +148,12 @@ class _MessageBubbleState extends State<MessageBubble>
                         Expanded(
                           child: Text(
                             isFileOffer
-                                ? l10n.bubbleReceiveFile(widget.notification.senderName)
-                                : l10n.bubbleReceiveText(widget.notification.senderName),
+                                ? l10n.bubbleReceiveFile(
+                                    widget.notification.senderName,
+                                  )
+                                : l10n.bubbleReceiveText(
+                                    widget.notification.senderName,
+                                  ),
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: colorScheme.onSurface,
@@ -170,7 +176,7 @@ class _MessageBubbleState extends State<MessageBubble>
                         color: colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: isFileOffer 
+                      child: isFileOffer
                           ? _buildFileList(theme, l10n)
                           : Text(
                               widget.notification.message,
@@ -186,7 +192,7 @@ class _MessageBubbleState extends State<MessageBubble>
                     // Action buttons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: isFileOffer 
+                      children: isFileOffer
                           ? [
                               TextButton(
                                 onPressed: _dismiss,
@@ -278,7 +284,9 @@ class _MessageBubbleState extends State<MessageBubble>
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               l10n.bubbleMoreFiles(files.length - 3),
-              style: theme.textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
             ),
           ),
       ],
@@ -302,38 +310,71 @@ class _MessageBubbleState extends State<MessageBubble>
 class MessageBubbleOverlay {
   static OverlayEntry? _currentOverlay;
 
-  static void show(BuildContext context, MessageNotification notification) {
+  static void show(
+    BuildContext context,
+    MessageNotification notification, {
+    OverlayState? overlay,
+  }) {
     debugPrint('MessageBubbleOverlay: Showing bubble');
     // Remove existing overlay if any
     hide();
 
-    _currentOverlay = OverlayEntry(
+    OverlayEntry? entry;
+    entry = OverlayEntry(
       builder: (context) {
         debugPrint('MessageBubbleOverlay: Building overlay entry');
-        
+
         // Check platform for layout
         final isDesktop = Platform.isWindows || Platform.isMacOS;
-        
+
         return Positioned(
-          bottom: isDesktop ? 24 : 100, // Bottom right for desktop, above nav bar for mobile
+          bottom: isDesktop
+              ? 24
+              : 100, // Bottom right for desktop, above nav bar for mobile
           right: isDesktop ? 24 : 16,
           left: isDesktop ? null : 16, // Full width (with padding) for mobile
           width: isDesktop ? 400 : null, // Fixed width for desktop
-          child: MessageBubble(notification: notification, onDismiss: hide),
+          child: MessageBubble(
+            notification: notification,
+            onDismiss: () {
+              if (_currentOverlay == entry) {
+                hide();
+              }
+            },
+          ),
         );
       },
     );
 
+    final targetOverlay = overlay ?? Overlay.maybeOf(context);
+    if (targetOverlay == null) {
+      debugPrint(
+        'MessageBubbleOverlay: Error inserting overlay: No Overlay widget found.',
+      );
+      return;
+    }
+
+    _currentOverlay = entry;
+
     try {
-      Overlay.of(context).insert(_currentOverlay!);
+      targetOverlay.insert(_currentOverlay!);
       debugPrint('MessageBubbleOverlay: Overlay inserted');
     } catch (e) {
+      _currentOverlay = null;
       debugPrint('MessageBubbleOverlay: Error inserting overlay: $e');
     }
   }
 
   static void hide() {
-    _currentOverlay?.remove();
-    _currentOverlay = null;
+    if (_currentOverlay != null) {
+      if (_currentOverlay!.mounted) {
+        try {
+          _currentOverlay!.remove();
+        } catch (e) {
+          debugPrint('MessageBubbleOverlay: Error removing overlay: $e');
+        }
+      }
+      _currentOverlay = null;
+    }
   }
 }
